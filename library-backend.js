@@ -130,6 +130,10 @@ const typeDefs = `
         name:String!
         bookCount: Int
     ): Author
+    editAuthor(
+        name:String!
+        setBornTo:Int
+        ): Author
   }
 `;
 
@@ -173,6 +177,20 @@ const resolvers = {
       return newBook;
     },
     addAuthor: addAuthor,
+    editAuthor: (root, args) => {
+      if (!authors.find((author) => author.name === args.name)) {
+        return null;
+      } else {
+        authors = authors.map((author) => {
+          if (author.name === args.name) {
+            return { born: args.setBornTo, ...author };
+          } else {
+            return author;
+          }
+        });
+        return authors.find((author) => author.name === args.name);
+      }
+    },
   },
 };
 
