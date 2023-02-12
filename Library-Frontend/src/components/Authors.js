@@ -20,7 +20,7 @@ const UPDATE_AUTHOR = gql`
   }
 `;
 
-const SetBirthYear = () => {
+const SetBirthYear = ({ authors }) => {
   const [updateAuthor] = useMutation(UPDATE_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
   });
@@ -30,6 +30,7 @@ const SetBirthYear = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     updateAuthor({ variables: { name, setBornTo: Number(born) } });
+    console.log(name, born);
     setName("");
     setBorn("");
   };
@@ -40,10 +41,16 @@ const SetBirthYear = () => {
       <form onSubmit={handleSubmit}>
         <div>
           Name{" "}
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          ></input>
+          <select value={name} onChange={({ target }) => setName(target.value)}>
+            <option value="" defaultValue disabled hidden>
+              Choose Author {}
+            </option>
+            {authors.map((author) => (
+              <option key={author.name} value={author.name}>
+                {author.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           born{" "}
@@ -91,7 +98,7 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <SetBirthYear />
+      <SetBirthYear authors={authors.data.allAuthors} />
     </div>
   );
 };
