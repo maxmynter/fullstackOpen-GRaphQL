@@ -209,10 +209,6 @@ const resolvers = {
       } else {
         thisBookAuthor = await Author.findOne({ name: args.author });
       }
-      console.log("thisBookAuthor", thisBookAuthor);
-      console.log("ID", thisBookAuthor._id);
-
-      console.log("ID String", thisBookAuthor._id.toString());
       const newBook = new Book({
         ...args,
         author: thisBookAuthor._id.toString(),
