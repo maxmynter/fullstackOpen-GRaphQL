@@ -18,6 +18,9 @@
   "homepage": "https://github.com/maxmynter/fullstackOpen-GRaphQL#readme",
   "dependencies": {
     "@apollo/server": "^4.3.3",
+    "dotenv": "^16.0.3",
+    "graphql": "^16.6.0",
+    "mongoose": "^6.9.1",
     "uuid": "^9.0.0"
   }
 }
