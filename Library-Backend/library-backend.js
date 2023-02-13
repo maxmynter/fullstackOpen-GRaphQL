@@ -183,7 +183,7 @@ const resolvers = {
       } else {
         authors = authors.map((author) => {
           if (author.name === args.name) {
-            return { born: args.setBornTo, ...author };
+            return { ...author, born: args.setBornTo };
           } else {
             return author;
           }
