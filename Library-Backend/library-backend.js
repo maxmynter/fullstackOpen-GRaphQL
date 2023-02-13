@@ -226,7 +226,15 @@ const resolvers = {
       }
       return newBook;
     },
-    addAuthor: addAuthor,
+    addAuthor: () => {
+      try {
+        addAuthor;
+      } catch (error) {
+        throw new GraphQLError("Adding Author failed", {
+          extensions: { code: "BAD_USER_INPUT", invalidArgs: args, error },
+        });
+      }
+    },
     editAuthor: (root, args) => {
       if (!Author.find((author) => author.name === args.name)) {
         return null;
