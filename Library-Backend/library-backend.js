@@ -128,7 +128,7 @@ const typeDefs = `
   type Book {
     title: String
     author: Author!
-    published: Int!
+    published: Int
     genres: [String]!
     id:ID!
   }
@@ -221,8 +221,10 @@ const resolvers = {
     me: (root, args, context) => context.currentUser,
   },
   Author: {
-    bookCount: (root) =>
-      Books.find({}).filter((book) => book.author === root.name).length,
+    bookCount: async (root) => {
+      const booksToFilter = await Book.find({});
+      return booksToFilter.filter((book) => book.author === root.name).length;
+    },
   },
   Mutation: {
     addBook: async (root, args, { currentUser }) => {

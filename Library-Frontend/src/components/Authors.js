@@ -81,7 +81,6 @@ const Authors = (props) => {
 
   return (
     <div>
-      {console.log(authors)}
       <h2>authors</h2>
       <table>
         <tbody>
