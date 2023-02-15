@@ -1,5 +1,4 @@
-import { useQuery, useLazyQuery, gql } from "@apollo/client";
-import { useEffect } from "react";
+import { useQuery, gql } from "@apollo/client";
 
 const GET_FAV_GENRE = gql`
   query Query {
