@@ -228,6 +228,7 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args, { currentUser }) => {
+      console.log("in Add Book");
       if (!currentUser) {
         throwNotLoggedInError();
       } else {
@@ -252,7 +253,7 @@ const resolvers = {
             extensions: { code: "BAD_USER_INPUT", invalidArgs: args, error },
           });
         }
-        return newBook;
+        return await Book.findOne({ title: args.title }).populate("author");
       }
     },
     addAuthor: () => {

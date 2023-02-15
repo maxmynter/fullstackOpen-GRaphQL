@@ -16,7 +16,9 @@ const CREATE_BOOK = gql`
       genres: $genres
     ) {
       title
-      author
+      author {
+        name
+      }
       published
       genres
     }
@@ -31,7 +33,12 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([]);
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }],
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        console.log("In Callback", response, allBooks);
+        return { allBooks: allBooks.concat(response.data.addBook) };
+      });
+    },
   });
 
   if (!props.show) {
@@ -39,11 +46,12 @@ const NewBook = (props) => {
   }
   const submit = async (event) => {
     event.preventDefault();
+    console.log("In Submit");
 
-    console.log("add book...");
-    createBook({
+    const returnValue = createBook({
       variables: { title, author, published: parseInt(published), genres },
     });
+    console.log("Created", returnValue);
 
     setTitle("");
     setPublished("");
