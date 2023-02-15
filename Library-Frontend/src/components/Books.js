@@ -35,7 +35,7 @@ const Books = (props) => {
       <h2>books</h2>
       {filterGenre ? (
         <>
-          <h3>Showing only genre '{filterGenre}'</h3>{" "}
+          <h3>Books in genre '{filterGenre}'</h3>{" "}
           <button onClick={() => setFilterGenre(null)}>Remove Filter</button>
         </>
       ) : null}
