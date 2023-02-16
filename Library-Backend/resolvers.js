@@ -54,7 +54,8 @@ const resolvers = {
   Author: {
     bookCount: async (root) => {
       const booksToFilter = await Book.find({});
-      return booksToFilter.filter((book) => book.author === root.name).length;
+      return booksToFilter.filter((book) => book.author.equals(root._id))
+        .length; // author is saved as ID String
     },
   },
   Mutation: {
@@ -67,7 +68,6 @@ const resolvers = {
         if (!authors.map((author) => author.name).includes(args.author)) {
           thisBookAuthor = await addAuthor(null, {
             name: args.author,
-            bookCount: 1,
           });
         } else {
           thisBookAuthor = await Author.findOne({ name: args.author });
@@ -94,7 +94,7 @@ const resolvers = {
     },
     addAuthor: (root, args) => {
       try {
-        addAuthor(null, args); // HWERE
+        addAuthor(null, args);
       } catch (error) {
         throw new GraphQLError("Adding Author failed", {
           extensions: { code: "BAD_USER_INPUT", invalidArgs: args, error },
