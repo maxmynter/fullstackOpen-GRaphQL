@@ -1,13 +1,38 @@
 import { useState } from "react";
+import { gql, useSubscription } from "@apollo/client";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import Login from "./components/Login";
 import Reccomend from "./components/Reccomend";
 
+const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      title
+      author {
+        name
+      }
+    }
+  }
+`;
+
 const App = () => {
   const [page, setPage] = useState("authors");
   const [loggedIn, setLoggedIn] = useState(false);
+  const [newBookAlert, setNewBookAlert] = useState(null);
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      console.log("SubscribeCall", data);
+      console.log("data.bookAdded", data.data.bookAdded);
+      setNewBookAlert(data.data.bookAdded);
+      setTimeout(() => {
+        setNewBookAlert(null);
+      }, 5000);
+      console.log("After TimeOut");
+    },
+  });
 
   return (
     <div>
@@ -32,6 +57,14 @@ const App = () => {
           <button onClick={() => setPage("login")}>login</button>
         )}
       </div>
+      {newBookAlert ? (
+        <div>
+          <span>
+            '{newBookAlert.title}' by '{newBookAlert.author.name}' was added to
+            the book database.
+          </span>
+        </div>
+      ) : null}
 
       <Authors show={page === "authors"} />
 
