@@ -53,9 +53,17 @@ const resolvers = {
   },
   Author: {
     bookCount: async (root) => {
-      const booksToFilter = await Book.find({});
-      return booksToFilter.filter((book) => book.author.equals(root._id))
-        .length; // author is saved as ID String
+      if (!root.bookCount) {
+        // Set Book Count if book Count not saved in DB. For Backwards Compatibility.
+        const booksToFilter = await Book.find({});
+        const bookCount = booksToFilter.filter((book) =>
+          book.author.equals(root._id)
+        ).length;
+        Author.findOneAndUpdate({ name: root.name }, { bookCount }).exec();
+        return bookCount; // author is saved as ID String}
+      } else {
+        return root.bookCount;
+      }
     },
   },
   Mutation: {
